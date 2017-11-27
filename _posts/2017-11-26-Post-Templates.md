@@ -1,8 +1,8 @@
 ---
 layout: post
-title:  "Posts Templates"
-categories: Templates
-tags:  Blog
+title:  "Posts Template"
+categories: Blog
+tags:  Template
 author: Trelis
 ---
 
