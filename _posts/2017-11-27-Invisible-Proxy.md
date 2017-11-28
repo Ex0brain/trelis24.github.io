@@ -12,6 +12,9 @@ author: Trelis
 ## Description
 This option is sometimes useful if the application you are targeting employs a thick client component that runs outside of the browser, or a browser plugin that makes its own HTTP requests outside of the browser's framework. Often, these clients don't support HTTP proxies, or don't provide an easy way to configure them to use one. 
 
+
+
+
 However, you must have take into account the following:
 When using plain HTTP, a proxy-style request looks like this:
 
@@ -47,7 +50,7 @@ This change will make that when the machine whats to resolve the host myexample.
 Once the client is configured, you need to configure the proxy. With Burp you have to change the following options
 
 Proxy -> Options -> Proxy Listeners -> Edit
-- Binding (where the proxy will be listening to)
+- **Binding** (where the proxy will be listening to)
 	- Binding to port: you need to especify which port the proxy will listen to. For example, if the client makes the request to https://myexample.com, the proxy should be listening in the port 443.
 	- Binding to address: it is recommended to use the option "All Interficies".
 - Request handling (where the proxy will send the traffic)
