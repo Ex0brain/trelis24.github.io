@@ -11,4 +11,4 @@ type: page
 
 ## About Me
 
-## Why this blog?
+## Why this bloge
