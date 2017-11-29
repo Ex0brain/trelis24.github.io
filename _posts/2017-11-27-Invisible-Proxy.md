@@ -15,6 +15,16 @@ This option is sometimes useful if the application you are targeting employs a t
 
 
 
+I have made a draw to in order to have a general vision: 
+![](https://github.com/LordATM/lordatm.github.io/blob/master/img/2017-11-27-Invisible-Proxy/draw_proxy.png)
+1. Client asks for the IP of myexample.com
+2. From `hosts` file it takes the IP is 127.0.0.1
+3. Client makes the requests to 127.0.0.1 with port 443
+4. Proxy makes the requests to the server (redirecting the traffic)
+5. Server answers to the proxy
+6. Proxy answers to the client
+
+## Requests
 However, you must have take into account the following:
 When using plain HTTP, a proxy-style request looks like this:
 
@@ -57,6 +67,7 @@ Proxy -> Options -> Proxy Listeners -> Edit
 	- ~~Redirect to host~~: what address Burp will send the traffic to. So, if  you want the server to answer the requests you are makeing, you should write here the IP address of the host myexample.com.
 	- ~~Redirect to port~~: the port the server will be waiting the requests from the client. Usually it will be 443 (if https) or 80 (if http).
 	- ~~Support invisible proxying~~: you have to check this check-box to make Burp invisible.
+	![](https://github.com/LordATM/lordatm.github.io/blob/master/img/2017-11-27-Invisible-Proxy/invisible_proxy.png)
 
 ## Type of certificates
 Non-proxy-aware clients negotiate SSL directly with the listener, without first sending a CONNECT request identifying the destination host that the client is seeking to contact. Many clients, including browsers, support the "server~~name" extension in the Client Hello message, which identifies the destination host that the client wishes to negotiate with. If this extension is present, Burp uses it to generate a certificate for that host in the normal way. However, if the extension is not present in the Client Hello message, Burp will fail over to using a static self-signed certificate instead. 
