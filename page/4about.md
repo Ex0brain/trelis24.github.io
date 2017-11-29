@@ -10,7 +10,7 @@ type: page
 {:toc}
 
 ## About Me
-I am working as a Pentester in a company where I have the luck to work in different projects. I do auditories in websites, infrastructure, iOS applications and ATMs.
+I am working as a Pentester in a company where I have the luck to collaborate in different projects. I do auditories in websites, infrastructure, iOS applications and ATMs.
 
 On my own, now I am focusing in learning reversing with the objective to get better during iOS pentesting. 
 
