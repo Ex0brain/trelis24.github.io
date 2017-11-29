@@ -33,7 +33,7 @@ function createAndDownloadFile(fileName, content) {
 ```
 
 
-## Inster an image
+## Insert an image
 
 ![](https://img.alicdn.com/tfs/TB16.GnOpXXXXXdapXXXXXXXXXX-307-134.png)
 

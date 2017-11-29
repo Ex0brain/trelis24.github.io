@@ -38,7 +38,7 @@ In order to redirect the traffic to Burp proxy, you have to edit `hosts` file:
 - **Linux**: /etc/hosts
 - **Windows**: C:\Windows\system32\drivers\etc\hosts
 
-And we add the following entrie:
+And we add the following entry:
 
 ```
 127.0.0.1 	myexample.com
@@ -51,19 +51,19 @@ Once the client is configured, you need to configure the proxy. With Burp you ha
 
 Proxy -> Options -> Proxy Listeners -> Edit
 - **Binding** (where the proxy will be listening to)
-	- _Binding to port_: you need to especify which port the proxy will listen to. For example, if the client makes the request to https://myexample.com, the proxy should be listening in the port 443.
-	- _Binding to address_: it is recommended to use the option "All Interficies".
+	- ~~Binding to port~~: you need to specify which port the proxy will listen to. For example, if the client makes the request to https://myexample.com, the proxy should be listening in the port 443.
+	- ~~Binding to address~~: it is recommended to use the option "All Interficies".
 - **Request handling** (where the proxy will send the traffic)
-	- _Redirect to host_: this option especify what address Burp will send the traffic. So, if  you want the server to answer the requests you are makeing, you should write here the IP address of the host myexample.com.
-	- _Redirect to port_: the port the server will be waitting the requests from the client. Usually it will be 443 (if https) or 80 (if http).
-	- _Support invisible proxying_: you have to check this checkbox to make Burp invisible.
+	- ~~Redirect to host~~: what address Burp will send the traffic to. So, if  you want the server to answer the requests you are makeing, you should write here the IP address of the host myexample.com.
+	- ~~Redirect to port~~: the port the server will be waiting the requests from the client. Usually it will be 443 (if https) or 80 (if http).
+	- ~~Support invisible proxying~~: you have to check this check-box to make Burp invisible.
 
 ## Type of certificates
-Non-proxy-aware clients negotiate SSL directly with the listener, without first sending a CONNECT request identifying the destination host that the client is seeking to contact. Many clients, including browsers, support the "server_name" extension in the Client Hello message, which identifies the destination host that the client wishes to negotiate with. If this extension is present, Burp uses it to generate a certificate for that host in the normal way. However, if the extension is not present in the Client Hello message, Burp will fail over to using a static self-signed certificate instead. 
+Non-proxy-aware clients negotiate SSL directly with the listener, without first sending a CONNECT request identifying the destination host that the client is seeking to contact. Many clients, including browsers, support the "server~~name" extension in the Client Hello message, which identifies the destination host that the client wishes to negotiate with. If this extension is present, Burp uses it to generate a certificate for that host in the normal way. However, if the extension is not present in the Client Hello message, Burp will fail over to using a static self-signed certificate instead. 
 
 Burp gives four options:
 - **Use a self-signed certificate**
-- **Genenerate CA-signed per-host certificates**: by default Burp uses this certificate. It might be installed into the browser.
+- **Generate CA-signed per-host certificates**: by default Burp uses this certificate. It might be installed into the browser.
 - **Generate a CA-signet certificate with specific hostname**: needed in the invisible proxy.
 - **Use a custom certificate**: if you have the certificate and the password, you can use the certificate of the client instead of the one Burp creates.
 
