@@ -54,12 +54,12 @@ And we add the following entry:
 127.0.0.1 	myexample.com
 ```
 
-This change will make that when the machine whats to resolve the host myexample.com, instead of answering it to the DNS, it will resolve as 127.0.0.1. Redirecting all the traffic to example.org to the localhost.
+This change will make that when the machine wants to resolve the host myexample.com, instead of asking it to the DNS, it will resolve as 127.0.0.1. Redirecting all the traffic of example.org to the localhost.
 
 ## Configure Burp
 Once the client is configured, you need to configure the proxy. With Burp you have to change the following options
 
-Proxy -> Options -> Proxy Listeners -> Edit
+`Proxy -> Options -> Proxy Listeners -> Edit`
 - **Binding** (where the proxy will be listening to)
 	- __Binding to port__: you need to specify which port the proxy will listen to. For example, if the client makes the request to https://myexample.com, the proxy should be listening in the port 443.
 	- __Binding to address__: it is recommended to use the option "All Interficies".
