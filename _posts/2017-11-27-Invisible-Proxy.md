@@ -18,8 +18,8 @@ This option is sometimes useful if the application you are targeting employs a t
 I have made a draw to in order to have a general vision: 
 ![](https://raw.githubusercontent.com/LordATM/lordatm.github.io/master/img/2017-11-27-Invisible-Proxy/draw_proxy.png)
 1. Client asks for the IP of myexample.com
-2. From `hosts` file it takes the IP is 127.0.0.1
-3. Client makes the requests to 127.0.0.1 with port 443
+2. From `hosts` file it takes the IP is 1.2.3.4
+3. Client makes the requests to 1.2.3.4 with port 443
 4. Proxy makes the requests to the server (redirecting the traffic)
 5. Server answers to the proxy
 6. Proxy answers to the client
@@ -51,10 +51,10 @@ In order to redirect the traffic to Burp proxy, you have to edit `hosts` file:
 And we add the following entry:
 
 ```
-127.0.0.1 	myexample.com
+1.2.3.4 	myexample.com
 ```
 
-This change will make that when the machine wants to resolve the host myexample.com, instead of asking it to the DNS, it will resolve as 127.0.0.1. Redirecting all the traffic of example.org to the localhost.
+This change will make that when the machine wants to resolve the host myexample.com, instead of asking it to the DNS, it will resolve as 1.2.3.4. Redirecting all the traffic of example.org to the localhost.
 
 ## Configure Burp
 Once the client is configured, you need to configure the proxy. With Burp you have to change the following options
