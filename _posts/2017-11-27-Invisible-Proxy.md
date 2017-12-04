@@ -39,7 +39,7 @@ Whereas the corresponding to the invisible proxy request looks like this:
 GET /foo.php HTTP/1.1
 Host: myexample.com
 ```
- Normally, web proxies need to receive the full URL in the first line of the request in order to determine which destination host to forward the request to (they do not look at the Host header to determine the destination). If invisible proxying is enabled, when Burp receives any non-proxy-style requests, it will parse out the contents of the Host header, and use that as the destination host for that request.
+Normally, web proxies need to receive the full URL in the first line of the request in order to determine which destination host to forward the request to (they do not look at the Host header to determine the destination). If invisible proxying is enabled, when Burp receives any non-proxy-style requests, it will parse out the contents of the Host header, and use that as the destination host for that request.
 
 When using HTTPS with a proxy, clients send a CONNECT request identifying the destination host they wish to connect to, and then perform SSL negotiation. However, non-proxy-aware clients will proceed directly to SSL negotiation, believing they are communicating directly with the destination host. If invisible proxying is enabled, Burp will tolerate direct negotiation of SSL by the client, and again will parse out the contents of the Host header from the decrypted request. 
 
