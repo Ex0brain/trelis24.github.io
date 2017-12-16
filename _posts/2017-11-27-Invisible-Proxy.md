@@ -2,7 +2,7 @@
 layout: post
 title:  "Invisible Proxy"
 categories: Proxy
-tags:  burp
+tags:  burp proxy
 author: Trelis
 ---
 
