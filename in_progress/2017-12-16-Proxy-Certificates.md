@@ -67,6 +67,7 @@ In the following wireshark screenshot you can see all the hadnshake process:
 
 ## Trusted CA
 
+
 ## Certificate Pinning
 
 
