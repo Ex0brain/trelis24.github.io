@@ -12,9 +12,14 @@ author: Trelis
 ## Description
 SSH's port forwarding feature can smuggle various types of Internet traffic into or out of a network. This can be used to avoid network monitoring or sniffers, or bypass badly configured routers on the Internet.
 
+
+
+
 For example, from PC (10.76.20.110) it is not possible to access to my blog (lordatm.github.io) because there is a firewall blocking the connection. However, PC2 (10.76.20.108) can access to the website because it is in an other city.
 So, the main objective is to send all the traffic from PC to PC2 and then to the server. This can be done using port forwarding via SSH:
+
 ![](https://raw.githubusercontent.com/LordATM/lordatm.github.io/master/img/2017-12-20-SSH-Tunneling/SSH_Tunneling.png)
+
 1. Connect PC and PC2 via SSH
 2. Redirect all the traffic to the proxy
 3. Configure the proxy in order to send all the traffic received via SOCKS to PC2
@@ -32,14 +37,18 @@ Currently the SOCKS4 and SOCKS5 protocols are supported, and ssh will act as a S
 
 ## Burp SOCKS Configuration
 First of all, you need to configure your browser to redirect the traffic to Burp proxy and Burp to listen to the port 8080:
+
 ![](https://raw.githubusercontent.com/LordATM/lordatm.github.io/master/img/2017-12-20-SSH-Tunneling/burp.png)
 
 Secondly, you need to redirect all the traffic to the SSH that is listening to port 4444 in this example. In the tab "user options" you need to force Burp to use SOCKS and make the redirection to port 4444 of localhost:
+
 ![](https://raw.githubusercontent.com/LordATM/lordatm.github.io/master/img/2017-12-20-SSH-Tunneling/burp_socks.png)
 
 ## Final result
 In a normal connection, PC would negotiate the SSL directly with the server:
+
 ![](https://raw.githubusercontent.com/LordATM/lordatm.github.io/master/img/2017-12-20-SSH-Tunneling/wireshark_normal.png)
 
 However, in this scenario, PC negotiates the SSL handshake with the proxy and PC2 negotiates it with the server. So, the server doesn't know who made the request in first place, he thinks it was PC2:
+
 ![](https://raw.githubusercontent.com/LordATM/lordatm.github.io/master/img/2017-12-20-SSH-Tunneling/wireshark_ssh.png)
