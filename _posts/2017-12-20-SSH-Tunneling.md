@@ -44,7 +44,7 @@ Secondly, you need to redirect all the traffic to the SSH that is listening to p
 
 ![](https://raw.githubusercontent.com/LordATM/lordatm.github.io/master/img/2017-12-20-SSH-Tunneling/burp_socks.png)
 
-## Final result
+## Wireshark 
 In a normal connection, PC would negotiate the SSL directly with the server:
 
 ![](https://raw.githubusercontent.com/LordATM/lordatm.github.io/master/img/2017-12-20-SSH-Tunneling/wireshark_normal.png)
