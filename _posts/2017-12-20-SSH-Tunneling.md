@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "SSH Tunneling"
-categories: ssh
+categories: SSH
 tags:  ssh tunneling
 author: Trelis
 ---
