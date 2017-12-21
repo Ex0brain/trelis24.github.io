@@ -27,6 +27,7 @@ If the traffic goes from PC to PC2 and then to the server it will be possible to
 
 ## Dynamic Port Forwarding SSH
 Dynamic port forwarding turns your SSH client into a SOCKS proxy server. SOCKS is a little-known but widely-implemented protocol for programs to request any Internet connection through a proxy server. Each program that uses the proxy server needs to be configured specifically, and reconfigured when you stop using the proxy server. 
+
 The following command opens the port 4444 in PC. So all the traffic you want to redirect to PC2 must go to 127.0.0.1:4444:
 
 ```
