@@ -62,13 +62,17 @@ In the following wireshark screenshot you can see all the hadnshake process:
 ![](https://raw.githubusercontent.com/LordATM/lordatm.github.io/master/img/2017-12-16-Proxy-Certificates/client_certificate.png)
 
 # Proxy detection methods
-## Browser warning
+A way to protect against man-in-the-middle attacks, the application should check before the SSL handshake if the server certificate is the trustful one. 
 
+If the proxy certificate is not in the whitelist, when the application receive the proxy certificate it will return an SSL error in the handshake:
+![](https://raw.githubusercontent.com/LordATM/lordatm.github.io/master/img/2017-12-16-Proxy-Certificates/Cat_error_burp.png)
 
-## Trusted CA
+If an attacker is successful and adds his certificate in the whitelist, the application will continue with the handshake and the attacker will be able to intercept all the traffic unencrypted:
+![](https://raw.githubusercontent.com/LordATM/lordatm.github.io/master/img/2017-12-16-Proxy-Certificates/Cat_ok_burp.png)
 
-
-## Certificate Pinning
+There are two methods:
+1. Trusted CA: the developers have to add the server certificate or the chain into the whitelist. If the communications are HTTP, the certificates need to be added in any browser and if the application uses Java to communicate, the certificates need to be added to Java whitelist.
+2. Certificate Pinning: this method is the securest one because the attacker needs to obtain the binary and make reversing in order to either add his certificate in the code or modify it to bypass the control. However, every time the server updates his certificate, developers will have to update the hash in the source code.
 
 
 # Certificate installation 
