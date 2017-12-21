@@ -53,4 +53,9 @@ In a normal connection, PC would negotiate the SSL directly with the server:
 
 However, in this scenario, PC negotiates the SSL handshake with the proxy and PC2 negotiates it with the server. So, the server doesn't know who made the request in first place, he thinks it was PC2.
 In the following screenshot, you can see the connections between PC and Burp and PC and PC2 via SSH:
+
 ![](https://raw.githubusercontent.com/LordATM/lordatm.github.io/master/img/2017-12-20-SSH-Tunneling/wireshark_ssh.png)
+
+Sniffing the traffic of PC2, you can see that all the connections are between PC2 and the server, and no PC and the server:
+
+![](https://raw.githubusercontent.com/LordATM/lordatm.github.io/master/img/2017-12-20-SSH-Tunneling/tcp_dump.png)
