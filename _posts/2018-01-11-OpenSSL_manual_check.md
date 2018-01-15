@@ -119,10 +119,13 @@ nmap -sV --script=ssl-heartbleed example.com -p 443
 ```
 It can also be checked using the module "auxiliary/scanner/ssl/openssl_heartbleed".
 
+Proof of concept: https://github.com/mpgn/heartbleed-PoC
+
 
 ## CSS
 (CVE-2014-0224)
 The vulnerability can only be exploited if both server and client are vulnerable to this issue. In the event that one of the two is vulnerable, there is no risk of exploitation.
+
 This issue requires an attacker to intercept and alter network traffic in real time in order to exploit the flaw. This reduces the risk that this vulnerability can be exploited but does not make it impossible, updating should be a primary remediation focus regardless of the difficulty in leveraging the exploit.
 
 This vulnerability can be check using Nmap:
@@ -271,3 +274,8 @@ If the server supports CBC3 ciphers, it is vulnerable.
 (CVE-2016–2183 and CVE-2016–6329)
 The use of small block sizes (64 bits) in conjunction with the CBC (cipher block chain) operation mode, such as Triple-DES and Blowfish, allows an attacker to decrypt traffic between the server and its clients. These algorithms are commonly used in several applications and protocols such as VPN, SSH, SSL and IPSec. To perform this attack, it is necessary being able to generate and capture high amounts of network traffic (typically around 78GB).
 
+This vulnerability can be check using OpenSSL:
+```
+openssl s_client -cipher 3DES -connect example.com:443
+```
+If the server supports 3DES or Blowfish, it is vulnerable.
