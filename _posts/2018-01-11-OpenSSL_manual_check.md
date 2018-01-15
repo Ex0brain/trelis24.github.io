@@ -21,9 +21,9 @@ However, in the final report the results of this script should not be used as an
 SSLv2 have a lot of weaknesses which could a allow an attacker to decrypt an modify communications.
 
 To check whether SSLv2 is enabled on the remote host, the following command can be used: 
-´´´
+```
 openssl s_client –ssl2 -connect example.com:443
-´´´
+```
 If SSLv2 is supported, the handshake will complete and server certificate information will be returned. Otherwise, it will return a handshake failure error.
 
 ## SSLv3
