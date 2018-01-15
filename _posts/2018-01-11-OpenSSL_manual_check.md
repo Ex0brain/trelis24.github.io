@@ -33,7 +33,6 @@ Moreover, the only non-CBC cipher supported in SSLv3 is RC4, which is know as a 
 To test whether a system supports SSLv3, the following OpenSSL command can be used:
 ```
 openssl s_client –ssl3 -connect example.com:443
-
 ```
 If SSLv3 is supported, the handshake will complete and server certificate information will be returned and the server is vulnerable to POODLE. Otherwise, it will return a handshake failure error.
 
@@ -42,12 +41,10 @@ To test whether a system supports TLS, the following OpenSSL command can be used
 
 ```
 openssl s_client -tls1_1 -connect example.com:443
-
 ```
 
 ```
 openssl s_client -tls1_2 -connect example.com:443
-
 ```
 If it does not connect, the server might be vulnerable because it will probably use SSLv2 or SSLv3 protocols.
 
