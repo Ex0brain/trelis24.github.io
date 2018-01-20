@@ -10,14 +10,14 @@ author: Trelis
 {:toc}
 
 # Description
-Obtain a shell with SYSTEM privilege before log in with any user using the functionality 'Sticky Keys'. This technique can be used if the attacker has physical access to the target machine.
+Obtain a shell with SYSTEM privilege in the log in screen using the functionality 'Sticky Keys'. This technique can be used if the attacker has physical access to the target machine.
 
 
 
 # Sticky Keys
 Sticky keys is an accessibility feature of some graphical user interfaces to assist users who have physical disabilities. It serializes keystrokes instead of pressing multiple keys at a time, allowing the user to press and release a modifier key, such as Shift, Ctrl, Alt, or the Windows key, and have it remain active until any other key is pressed.
 
-This functionality can be accessed before login a user pressing 5 time "Shift" key:
+This functionality can be accessed before login a user in by pressing 5 time "Shift" key:
 ![](https://raw.githubusercontent.com/LordATM/lordatm.github.io/master/img/2018-01-20-Sticky%20Keys/loginPage_stickyKeys.PNG)
 
 The executable of this functionality is named "setch.exe".
@@ -52,7 +52,7 @@ sudo mount /dev/sdaX folder_where_partitions_is_mounted
 
 Once mounted, if the partition is not encrypted, you will be able to move freely in the hard disk. 
 The 'setch.exe' is located in '%systemroot%/System32/', usually in 'Windows/System32/'. You only need to change this executable for the one you are interested in. In this example I will use 'cmd.exe':
-![](kali_cmd)
+![](https://raw.githubusercontent.com/LordATM/lordatm.github.io/master/img/2018-01-20-Sticky%20Keys/kali_cmd.PNG)
 
 After the reboot, if you press the key 'Shift' 5 times SYSTEM will execute the cmd.exe:
 ![](https://raw.githubusercontent.com/LordATM/lordatm.github.io/master/img/2018-01-20-Sticky%20Keys/loginPage_systemCMD.PNG)
