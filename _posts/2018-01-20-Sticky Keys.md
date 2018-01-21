@@ -71,3 +71,7 @@ After rebooting the machine, the user has been created:
 
 # DEMO
 [![IMAGE ALT TEXT HERE](https://raw.githubusercontent.com/LordATM/lordatm.github.io/master/img/2018-01-20-Sticky%20Keys/loginPage_systemCMD.PNG)](https://youtu.be/aW_9QE5isvk)
+
+
+<a href="http://www.youtube.com/watch?feature=player_embedded&v=https://youtu.be/aW_9QE5isvk" target="_blank"><img src="https://raw.githubusercontent.com/LordATM/lordatm.github.io/master/img/2018-01-20-Sticky%20Keys/loginPage_systemCMD.PNG" 
+alt="IMAGE ALT TEXT HERE" width="240" height="180" border="10" /></a>
