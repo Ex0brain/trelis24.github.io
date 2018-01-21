@@ -54,7 +54,7 @@ Once mounted, if the partition is not encrypted, you will be able to move freely
 The 'setch.exe' is located in '%systemroot%/System32/', usually in 'Windows/System32/'. You only need to change this executable for the one you are interested in. In this example I will use 'cmd.exe':
 ![](https://raw.githubusercontent.com/LordATM/lordatm.github.io/master/img/2018-01-20-Sticky%20Keys/kali_cmd.PNG)
 
-After the reboot, if you press the key 'Shift' 5 times SYSTEM will execute the cmd.exe:
+After the reboot, if you press the key 'Shift' 5 times, SYSTEM will execute the cmd.exe:
 ![](https://raw.githubusercontent.com/LordATM/lordatm.github.io/master/img/2018-01-20-Sticky%20Keys/loginPage_systemCMD.PNG)
 
 From here you can do whatever you want. For example, you could create a user with administrator privilege. The first command is used to add a new user and the second one to give it administrator privilege:
@@ -66,7 +66,8 @@ net localgroup administrators USER /add
 ```
 ![](https://raw.githubusercontent.com/LordATM/lordatm.github.io/master/img/2018-01-20-Sticky%20Keys/loginPage_addAdminUser.PNG)
 
-After the reboot the user has been created:
+After rebooting the machine, the user has been created:
 ![](https://raw.githubusercontent.com/LordATM/lordatm.github.io/master/img/2018-01-20-Sticky%20Keys/hacked.PNG)
 
-
+# DEMO
+[![IMAGE ALT TEXT HERE](https://raw.githubusercontent.com/LordATM/lordatm.github.io/master/img/2018-01-20-Sticky%20Keys/loginPage_systemCMD.PNG)](https://youtu.be/aW_9QE5isvk)
