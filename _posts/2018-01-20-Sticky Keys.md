@@ -27,7 +27,7 @@ The objective is to change the file "setch.exe" with a "cmd.exe", so when pressi
 No user has log in, so Admin has not been able to do it. The only user available is SYSTEM. So, if an attacker can change "setch.exe" will be able to run any executable with SYSTEM privilege.
 
 # Preconditions
-* Phisical access to the machine 
+* Physical access to the machine 
 * Being able to boot a live CD or USB
 * The hard disk must not be encrypted
 
