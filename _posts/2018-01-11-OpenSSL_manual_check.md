@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "OpenSSL manual check"
-categories: openssl
+categories: OpenSSL
 tags:  openssl testssl
 author: Trelis
 ---
