@@ -9,7 +9,6 @@ author: Trelis
 * content
 {:toc}
 
-# Description
 When analyzing the communications of a website, one of the scripts it's used is TestSSL because it's a fast way to test the cryptography and certificates of the site.
 However, in the final report the results of this script should not be used as an evidence. That's why I want to do a summary of how to check manually SSL/TLS vulnerabilities.
 

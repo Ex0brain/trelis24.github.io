@@ -9,7 +9,6 @@ author: Trelis
 * content
 {:toc}
 
-## Description
 This option is sometimes useful if the application you are targeting employs a thick client component that runs outside of the browser, or a browser plugin that makes its own HTTP requests outside of the browser's framework. Often, these clients don't support HTTP proxies, or don't provide an easy way to configure them to use one. 
 
 

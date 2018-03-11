@@ -9,7 +9,6 @@ author: Trelis
 * content
 {:toc}
 
-# Description
 Obtain a shell with SYSTEM privilege in the log in screen using the functionality 'Sticky Keys'. This technique can be used if the attacker has physical access to the target machine.
 
 

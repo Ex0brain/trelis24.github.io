@@ -9,7 +9,6 @@ author: Trelis
 * content
 {:toc}
 
-## Description
 SSH's port forwarding feature can smuggle various types of Internet traffic into or out of a network. This can be used to avoid network monitoring or sniffers, or bypass badly configured routers on the Internet.
 
 

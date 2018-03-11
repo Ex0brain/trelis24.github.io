@@ -9,7 +9,6 @@ author: Trelis
 * content
 {:toc}
 
-# Description
 With chntpw is possible to see and edit the information stored in SAM file, allowing an attacker to reset the password of a user or elevate its privileges.
 
 

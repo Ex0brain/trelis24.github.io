@@ -9,7 +9,6 @@ author: Trelis
 * content
 {:toc}
 
-# Description
 All Windows services have path to its executable defined in the registry editor. If this path is not double quoted, this service has the vulnerability known as "Unquoted Service Path" which could allow an attacker to make a privilege escalation.
 
 

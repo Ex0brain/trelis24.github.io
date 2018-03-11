@@ -9,7 +9,6 @@ author: Trelis
 * content
 {:toc}
 
-# Description
 In this post I will explain how SSL handshake works, how the client can detect there is a proxy intercepting the communications and how to set up the proxy in order to successfully intercept the communications.
 
 
