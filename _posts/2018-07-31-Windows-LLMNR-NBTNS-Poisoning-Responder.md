@@ -112,12 +112,12 @@ NTLMv2 hashes can not be used directly for Pass the Hash attacks. So, a cracking
 
 ## John the Ripper
 ```
-john SMB-NTLMv2-SSP-192.168.100.101.txt –wordlist=/usr/share/wordlists/rockyou.txt
+john SMB-NTLMv2-SSP.txt –wordlist=/usr/share/wordlists/rockyou.txt
 ```
 
 ## Hashcat
 ```
-hashcat -m 5600 SMB-NTLMv2-Client-10.7.7.30.txt ~/dic.txt
+hashcat -m 5600 SMB-NTLMv2-Client.txt /usr/share/wordlists/rockyou.txt
 ```
 
 
