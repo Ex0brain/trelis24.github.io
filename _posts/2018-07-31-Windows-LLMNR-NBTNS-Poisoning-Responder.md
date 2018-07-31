@@ -13,6 +13,7 @@ In this article it will be shown how it works Microsoft Windows's name resolutio
 
 
 
+
 # Name resolution procedure
 Computers with Windows operation system communicates with each other in order to perform name resolution.
 
@@ -35,7 +36,6 @@ It is served by the link-scope multicast address:
 
 It performs all operations via TCP and UDP port 5355.
 
-[wireshark llmnr]
 
 
 # NBT-NS
@@ -48,19 +48,25 @@ There are three different NetBIOS services:
 * Datagram Distribution Service: operates in 138 UDP port. Used for connectionless communications.
 * Session Services: operates in 139 TCP port. Used for connection-oriented communications.
 
-[wireshark netbios]
 
 
 # Vulnerability
 ## Description
 When a machine has these protocols enabled, if the local network DNS is not able to resolve the name, the machine will ask to all hosts of the network. So, any host of the network, who knows its IP, can reply. Even if a host replies with an incorrect information, it will be still regarded as legitimate.
 
-## Scenario
-https://pentest.blog/what-is-llmnr-wpad-and-how-to-abuse-them-during-pentest/
+For example, if a user fails in writing the name of a shared folder, the following error will be shown:
+![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2018-07-31-Windows-LLMNR-NBTNS-Poisoning-Responder/error.png)
 
-1. The victim will try to connect to the file sharing system, named filesrvr, which he typed incorrectly.
-2. The name resolution, which will be performed with the steps we mentioned earlier, will be questioned on the victim’s computer first.
-3. In step 2, because of the DNS Server does not have a corresponding record, the name of the system is sent as LLMNR, NetBIOS-NS query.
+Capturing the traffic with Wireshark, it can be seen how the computer asks in broadcast if anyone knows how to resolve the name:
+![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2018-07-31-Windows-LLMNR-NBTNS-Poisoning-Responder/netbios_wireshark1.png)
+
+
+## Scenario
+![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2018-07-31-Windows-LLMNR-NBTNS-Poisoning-Responder/diagram.png)
+
+1. The victim will try to connect to the file sharing system, named "trelis24Test", which he typed incorrectly.
+2. The name resolution, which will be performed with the steps mentioned earlier, will be questioned on the victim’s computer first.
+3. In step 3, because of the DNS Server does not have a corresponding record, the name of the system is sent as LLMNR or NetBIOS-NS query.
 4. The attacker listens to network traffic, catches name resolution query. It tells to the victim that he is the one the victim is look for.
 
 
@@ -70,26 +76,37 @@ Responder is a tool created by Laurent Gaffie used to obtain network credentials
 
 Creating authentication services like SMB, MSSQL, HTTP, HTTPS, FTP, POP3, SMTP, Proxy WPAD, DNS, LDAP, etc, it will try that the victim sends its credentials to any of this services so the attacker can steal them. 
 
-## Proof of Concept
-To demonstrate the attack, Kali Linux is used to steal the credentials of a Windows 7 user. Kali has Responder pre-installed and can be found at the directory “/usr/share/responder/”.
 
+## Proof of Concept
+To demonstrate the attack, Kali Linux is used to steal the credentials of a Windows 7 user. Kali has Responder pre-installed and can be found at the directory:
+```
+/usr/share/responder/
+```
+
+To start listening, determine the interface:
 ```
 responder –I eth0
 ```
 
-[responder screenshot]
+![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2018-07-31-Windows-LLMNR-NBTNS-Poisoning-Responder/responder.PNG)
 
-With this running, if a client now tries to resolve a name not in the DNS, our instance of Responder should poison the LLMNR and NBT-NS requests that are sent out.
 
-If a user requests a network resource that doesn't exist, Responder should say its IP knows the resource location. The victim will try to connect to the resource in the attacking machine using SMB. In the authentication process, the victim will send the username and hashed password.
+With this running, if a client now tries to resolve a name not in the DNS, the instance of Responder should poison the LLMNR and NBT-NS requests that are sent out.
 
-[responder screenshot]
+![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2018-07-31-Windows-LLMNR-NBTNS-Poisoning-Responder/responder_answer.PNG)
 
-[wireshark screenshot]
+
+If a user requests a network resource that doesn't exist, Responder should say its IP knows the resource location. The victim will try to connect to the resource in the attacking machine using SMB. In the authentication process, the victim will send the username and hashed password:
+
+![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2018-07-31-Windows-LLMNR-NBTNS-Poisoning-Responder/wireshark_netbios.PNG)
+
 
 
 # Post explotation
-Responder keeps the logs and hash values it detects under /usr/share/responder/
+Responder keeps the logs and hash values it detects under:
+```
+/usr/share/responder/logs
+```
 
 NTLMv2 hashes can not be used directly for Pass the Hash attacks. So, a cracking attack must be used in order to obtain plain-text password. There are several tools for hash cracking: John the Ripper, Hashcat, Cain&Abel, Hydra, etc.
 
