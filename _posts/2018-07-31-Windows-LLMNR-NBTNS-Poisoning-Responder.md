@@ -69,6 +69,13 @@ Capturing the traffic with Wireshark, it can be seen how the computer asks in br
 3. In step 3, because of the DNS Server does not have a corresponding record, the name of the system is sent as LLMNR or NetBIOS-NS query.
 4. The attacker listens to network traffic, catches name resolution query. It tells to the victim that he is the one the victim is look for.
 
+According to the sequence above, if an attacker wants to be sure that the attack is successful, he must do:
+1. DHCP poisoning attack
+2. DNS poisoning attack
+3. WPAD poisoning attack
+
+This article is focused only in attacking the third step, making the assumption that neither DHCP nor DNS are configured.
+
 
 # Exploiting
 ## Responder
@@ -78,7 +85,7 @@ Creating authentication services like SMB, MSSQL, HTTP, HTTPS, FTP, POP3, SMTP, 
 
 
 ## Proof of Concept
-To demonstrate the attack, Kali Linux is used to steal the credentials of a Windows 7 user. Kali has Responder pre-installed and can be found at the directory:
+To demonstrate the attack, Kali Linux is used to steal the credentials of a Windows 10 user. Kali has Responder pre-installed and can be found at the directory:
 ```
 /usr/share/responder/
 ```
