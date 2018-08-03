@@ -67,16 +67,20 @@ When the victim makes WPAD name resolution to the attacker WPAD fake server, it 
 ```
 responder -I eth0 -wFb
 ```
+
 ![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2018-08-03-Windows-WPAD-Poisoning-Responder/responder1.PNG)
 
 The victim will see the following dialog box:
+
 ![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2018-08-03-Windows-WPAD-Poisoning-Responder/authentication.PNG)
 
 
-And the attacker receives the credentials in clear-text:
+If the victim enters the credentials, the attacker will receive the username and password in clear-text:
+
 ![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2018-08-03-Windows-WPAD-Poisoning-Responder/responder2.PNG)
 
 With Wireshark, it can be seen how the victim tries to retrieve the wpad.dat file and it sends the password encoded with Base64:
+
 ![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2018-08-03-Windows-WPAD-Poisoning-Responder/wireshark2.png)
 
 
@@ -109,10 +113,10 @@ Now, when the victim tries to use the browser, he will see the following page:
 If, by chance, the victim clicks the link, a reverse shell will be downloaded:
 ![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2018-08-03-Windows-WPAD-Poisoning-Responder/responder4.PNG)
 
-And with a netcat in port 140 the attacker will be able to obtain access to the victim's computer:
+Finally, if the victim executes the malicious executable, with netcat in port 140 the attacker will be able to obtain access to the victim's computer:
 ![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2018-08-03-Windows-WPAD-Poisoning-Responder/shell.png)
 
 
 # Mitigation
 * First solution for this attack is, create DNS entry with “WPAD” that points to the corporate proxy server. So the attacker won’t be able to manipulate the traffic.
-* Second solution is disable “Autodetect Proxy Settings” on all Internet Explorers with Group Policy.
+* Second solution is disable “Autodetect Proxy Settings” on all browsers.
