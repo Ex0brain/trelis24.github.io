@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Windows - LLMNR and NBT-NS poisoning using Responder"
-categories: "windows"
+categories: "Windows"
 tags:  windows responder
 author: Trelis
 ---

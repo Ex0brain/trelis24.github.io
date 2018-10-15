@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Windows - WPAD poisoning using Responder"
-categories: "windows"
+categories: "Windows"
 tags:  windows responder
 author: Trelis
 ---
