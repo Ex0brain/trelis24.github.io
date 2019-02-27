@@ -12,7 +12,7 @@ author: Trelis
 # Introduction
 
 ## Process Memory
-When an application is stared in a Win32 environment, a process is created and virtual memory is assigned to. In a 32 bit process, the address ranges from 0x00000000 to 0xFFFFFFFF, where 0x00000000 to 0x7FFFFFFF is assigned to "user-land", and 0x80000000 to 0xFFFFFFFF is assigned to "kernel land".
+When an application is stared in a Win32 environment, a process is created and virtual memory is assigned to. In a 32 bit process, the address ranges from 0x00000000 to 0xFFFFFFFF, where 0x00000000 to 0x7FFFFFFF is assigned to "user-land", and 0x80000000 to 0xFFFFFFFF is assigned to "kernel land".[More information](https://www.bottomupcs.com/elements_of_a_process.xhtml)
 
 ### Stack
 A stack is generic data structure that works exactly like a stack of plates; you can push an item (put a plate on top of a stack of plates), which then becomes the top item, or you can pop an item.
@@ -21,7 +21,6 @@ Stacks are fundamental to function calls. Each time a function is called it gets
 By convention, stacks usually grow down. This means that the stack starts at a high address in memory and progressively gets lower.
 
 ![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-27-02-Basic-Buffer-Overflow/stack.png)
-https://www.bottomupcs.com/elements_of_a_process.xhtml
 
 ### Heap
 The heap is an area of memory that is managed by the process for on the fly memory allocation. This is for variables whose memory requirements are not known at compile time.
@@ -49,6 +48,8 @@ So the return address will be at %EBP+4, the first parameter at %EBP+8 and the f
 ![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-27-02-Basic-Buffer-Overflow/register.png)
 
 Data is stored in the registers using "Little Endian", right to letf: value 0x12345678 is stored like "\x78\x56\x34\x12"
+
+![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-27-02-Basic-Buffer-Overflow/little_endian.png)
 
 ## Example
 Taking as an example the following code:
@@ -156,7 +157,7 @@ Randomization of the virtual memory addresses at which functions and variables c
 
 
 ## Proof of Concept
-In order to show a practicle buffer overflow example, SLmail v5.5 will be used. It has a known vulnerability which can be found in exploit-db. https://www.exploit-db.com/exploits/638
+In order to show a practicle buffer overflow example, SLmail v5.5 will be used. It has a known vulnerability which can be found in [exploit-db][https://www.exploit-db.com/exploits/638]. 
 
 1. Crash the application by sending 'A's.
 
