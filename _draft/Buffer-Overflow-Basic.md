@@ -20,7 +20,7 @@ Stacks are fundamental to function calls. Each time a function is called it gets
 
 By convention, stacks usually grow down. This means that the stack starts at a high address in memory and progressively gets lower.
 
-[stack]
+![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-27-02-Basic-Buffer-Overflow/stack.png)
 https://www.bottomupcs.com/elements_of_a_process.xhtml
 
 ### Heap
@@ -46,7 +46,7 @@ So the return address will be at %EBP+4, the first parameter at %EBP+8 and the f
 * **ESI**: source index, holds location of input data
 * **EDI**: destination index, points to location of where result of data operation is stored 
 
-[REGISTER]
+![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-27-02-Basic-Buffer-Overflow/register.png)
 
 Data is stored in the registers using "Little Endian", right to letf: value 0x12345678 is stored like "\x78\x56\x34\x12"
 
@@ -67,31 +67,40 @@ int main() {
 Initialy we have an empty stack.
 
 1.	%EIP pointing at func in the main(). Saving the paramaters in inverse order.
-[1 2]
+![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-27-02-Basic-Buffer-Overflow/1.png)
+![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-27-02-Basic-Buffer-Overflow/2.png)
 
 2.	Saving the return address (the value of %EIP) in order to know which instruction will be the next to execute after exiting the function func().
-[3 4]
+![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-27-02-Basic-Buffer-Overflow/3.png)
+![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-27-02-Basic-Buffer-Overflow/4.png)
 
 3.	%EIP now points at func() and %EBP is saved in order to restore the state after the function func() is executed.
-[5 6]
+![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-27-02-Basic-Buffer-Overflow/5.png)
+![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-27-02-Basic-Buffer-Overflow/6.png)
 
 5.	%EBP = %ESP
-[7 8]
+![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-27-02-Basic-Buffer-Overflow/7.png)
+![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-27-02-Basic-Buffer-Overflow/8.png)
 
 6.	Saving the local variables.
-[9 10]
+![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-27-02-Basic-Buffer-Overflow/9.png)
+![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-27-02-Basic-Buffer-Overflow/10.png)
 
 7.	Now the func() code can execute. %EIP will point each line of code.
-[11 12]
+![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-27-02-Basic-Buffer-Overflow/11.png)
+![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-27-02-Basic-Buffer-Overflow/12.png)
 
 8.	After the execution, local variables are popped and moves %ESP back to where %EBP is.
-[13 14]
+![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-27-02-Basic-Buffer-Overflow/13.png)
+![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-27-02-Basic-Buffer-Overflow/14.png)
 
 9.	%EBP is popped so its state can restored to the previous state before entering to func().
-[15 16]
+![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-27-02-Basic-Buffer-Overflow/15.png)
+![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-27-02-Basic-Buffer-Overflow/16.png)
 
 10. %EIP is popped so its state can restored to the previous state before entering to func().
-[17 18]
+![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-27-02-Basic-Buffer-Overflow/17.png)
+![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-27-02-Basic-Buffer-Overflow/18.png)
 
 11. Parameters sent to the funcion func() are popped.
 
@@ -116,16 +125,16 @@ The most common reason why buffer overflow attacks work is because applications 
 
 ## Example
 1. It is expected to be stored 8 characters.
-[attack1]
+![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-27-02-Basic-Buffer-Overflow/attack1.png)
 
 2. 8 'A's are correctly stored
-[attack2]
+![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-27-02-Basic-Buffer-Overflow/attack2.png)
 
 3. Howeever, if insted of 8 'A's, 12 are stored, EBP value will be overwrited.
-[attack3]
+![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-27-02-Basic-Buffer-Overflow/attack3.png)
 
 4. If 16 'A' are stored, the register EIP will be overwrited. If an attacker is able to store malicious code in the memory where EIP is pointing, he will be able to execute it.
-[attack4]
+![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-27-02-Basic-Buffer-Overflow/attack4.png)
 
 
 ## Protections
