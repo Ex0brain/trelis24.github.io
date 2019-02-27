@@ -75,9 +75,9 @@ Initialy we have an empty stack.
 
 ![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-27-02-Basic-Buffer-Overflow/4.png)
 
-![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-27-02-Basic-Buffer-Overflow/5.png)
-
 3.	%EIP now points at func() and %EBP is saved in order to restore the state after the function func() is executed.
+
+![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-27-02-Basic-Buffer-Overflow/5.png)
 
 ![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-27-02-Basic-Buffer-Overflow/6.png)
 
@@ -89,15 +89,16 @@ Initialy we have an empty stack.
 
 ![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-27-02-Basic-Buffer-Overflow/10.png)
 
-![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-27-02-Basic-Buffer-Overflow/11.png)
-
 7.	Now the func() code can execute. %EIP will point each line of code.
+
+![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-27-02-Basic-Buffer-Overflow/11.png)
 
 ![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-27-02-Basic-Buffer-Overflow/12.png)
 
 8.	After the execution, local variables are popped and moves %ESP back to where %EBP is.
 
 ![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-27-02-Basic-Buffer-Overflow/13.png)
+
 ![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-27-02-Basic-Buffer-Overflow/14.png)
 
 9.	%EBP is popped so its state can restored to the previous state before entering to func().
