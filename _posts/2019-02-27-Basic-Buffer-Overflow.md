@@ -58,6 +58,7 @@ Data is stored in the registers using "Little Endian", right to letf: value 0x12
 
 ## Example
 Taking as an example the following code:
+
 ```python
 void func(int a, int b, int c){
 	int x = a + 2;
@@ -167,6 +168,7 @@ In order to show a practicle buffer overflow example, SLmail v5.5 will be used. 
 1. Crash the application by sending 'A's.
 
   The following script (fuzzing.py) connects to the vulnerable service and sends 'A's in the password camp:
+
   ```python
   #!/usr/bin/python
   import time, struct, sys
@@ -235,6 +237,7 @@ In order to show a practicle buffer overflow example, SLmail v5.5 will be used. 
 
 
   Using the unique patter in the script indentify_eip.py
+
   ```python
   #!/usr/bin/python
   import time, struct, sys
@@ -324,6 +327,7 @@ In order to show a practicle buffer overflow example, SLmail v5.5 will be used. 
 5. Discover bad characters by looking which of them are not correctly printed (Remember to include always \x00). 
 
   The script badchars.py sends all characters, from 0x01 to 0xFF:
+
   ```python
   #!/usr/bin/python
 
