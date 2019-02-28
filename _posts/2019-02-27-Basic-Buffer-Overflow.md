@@ -510,6 +510,6 @@ In order to show a practicle buffer overflow example, SLmail v5.5 will be used. 
 
   ```
 
-  After executing the exploit, reverse shell is obtained:
+After executing the exploit, reverse shell is obtained:
 
-  ![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-27-02-Basic-Buffer-Overflow/exploit.png)
+![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-27-02-Basic-Buffer-Overflow/exploit.png)
