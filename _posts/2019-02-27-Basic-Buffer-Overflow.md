@@ -214,7 +214,7 @@ In order to show a practicle buffer overflow example, SLmail v5.5 will be used. 
           s.close()
        except: 
           print "[+] Connection failed. Make sure IP/port are correct, or check debugger for SLmail crash."
-          sys.exit()
+          sys.exit() 
   ```
 
   After the script execution, EIP value is overwrite with 41414141 which is the ASCII value of AAAA:
