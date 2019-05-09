@@ -13,6 +13,9 @@ All Windows services have path to its executable defined in the registry editor.
 
 
 
+Per defecte APPLocker bloqueja tots els directoris de Windows excepte el Temp. Si es pot posar un binari en aquell directori, es podrà executar correctament.
+
+
 
 # cscript
 ## Description
