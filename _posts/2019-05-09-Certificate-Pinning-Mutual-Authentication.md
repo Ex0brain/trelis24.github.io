@@ -108,7 +108,7 @@ The controls mentioned before are implemented differently depending on what plat
 ## Java Applications
 Java aplications uses keyStore and trustStore to store the client and server certificates. A keyStore is used to store individual identity or certificate while trustStore is used to store other parties certificates signed by CA.
 
-![](https://raw.githubusercontent.com/LordATM/lordatm.github.io/master/img/2017-11-27-Invisible-Proxy/java_app.gif)
+![](https://raw.githubusercontent.com/LordATM/lordatm.github.io/master/img/2019-05-09-Certificate-Pinning-Mutual-Authentication/java_app.gif)
 1. A client requests access to a protected resource.
 2. The web server presents its certificate to the client.
 3. The client verifies the server’s certificate.
