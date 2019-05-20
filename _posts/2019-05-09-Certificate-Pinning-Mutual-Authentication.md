@@ -59,7 +59,7 @@ Once done that, the attacker will be able to see and modify any request and resp
 There are two different controls that make the MITM attack more difficult to perform. 
 
 ## Certificate Pinning
-The client is pre-configured to know what server certificate should expect. However the certificate has a correct chain of trust and hostname, if the certificate is not the one the client is expecting, the handshake will fail.
+The client is pre-configured to know what server certificate should expect. Although the certificate has a correct chain of trust and hostname, if the certificate is not the one the client is expecting, the handshake will fail.
 
 There are two types of certificate pinning:
 * **Hard Certificate Pinning**: method implemented usually in the application, the client has the exact server certificate details stored in the code or in a file. If the certificated received does not match with any of the ones stored by the client, the communications will fail.
@@ -78,6 +78,10 @@ If an attacker is successful and adds his certificate in the whitelist, the appl
 Certificate pinning allows to drop the SSL connection if a invalid certificate is detected. However, this control is vulnerable if the client is compromised.
 
 
+## Client Certificate Authentication
+Client Certificate Authentication works the other way around. It adds an extra layer of security so the server can be sure only clients that have the certificate can communicate successfully with it. However, since apps can be decompiled without a lot of effort, this client certificate can 'easily' be obtained by a malicious user. So this isn't a silver bullet.
+
+
 ## Mutual Authentication
 Mutual authentication control refers to not only the client validates the server certificate, but also the server validates the client certificate.
 
@@ -94,7 +98,7 @@ In the following wireshark screenshot you can see all the hadnshake process:
 ![](https://raw.githubusercontent.com/LordATM/lordatm.github.io/master/img/2019-05-09-Certificate-Pinning-Mutual-Authentication/client_certificate.png)
 
 
-With mutual authentication the server has absolute control of who is trying to connect. It drops connections either if the server or client certificate are invalid. The main improvement versus certificate pinning is that the connection won't be stablished even though the client has been compromised.
+With mutual authentication the server has absolute control of who is trying to connect. It drops connections either if the server or client certificate are invalid. The main improvement versus certificate pinning is that the connection will not be stablished even though the client has been compromised.
 However, the server must have previously provided each client with a unique certificate. In some enviroments this can not be deployed due to the difficulty to send a personal certificate to each client.
 
 
@@ -192,4 +196,4 @@ An attacker who successfully intercepts the first response might be able to send
 __NOTE__: Currently HPKP is only supported in Firefox and Opera. Chrome removed the support in Chrome 67.
 
 
-On the other hand, it is pretty common, in internal websites, to ask and check the client certificate. The server has a client certificates whitelist and everytime a new connection is performed, the server checks the client certificate is whitelisted. 
+On the other hand, it is pretty common, in internal websites, to ask and check the client certificate (Client Certificate Authentication). The server has a client certificates whitelist and everytime a new connection is performed, the server checks the client certificate is whitelisted. 
