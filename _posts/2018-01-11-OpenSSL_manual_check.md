@@ -234,13 +234,9 @@ If some of the server allow EXPORT ciphers, it is vulnerable.
 This vulnerability is an attack against the confidentiality of a HTTPS connection in a negligible amount of time. That is, it provides a way to extract the unencrypted plaintext from an encrypted session.
 Certain configurations on TLS 1.0 encrypts data by using cipher block chaining (CBC) mode with chained initialization vectors, which allows man-in-the-middle attackers to obtain plaintext HTTP headers via a blockwise chosen-boundary attack (BCBA) on an HTTPs session. 
 
-There are two things to check. First of all the protocol:
+There are two things to check. It uses sslv3 or tls1 and CBC cipher:
 ```
-openssl s_client -[sslv3/tls1] -connect example.com:443
-```
-Secondly de cipher block, for example:
-```
-openssl s_client -cipher DES-CBC3-SHA -connect example.com:443
+openssl s_client -[sslv3/tls1] -cipher CBC_CIPHER -connect example.com:443
 ```
 If the server allows SSLv3 or TLS1 and it is using ciphers with CBC, then the server is vulnerable to BEAST attack.
 
@@ -261,7 +257,7 @@ The Lucky Thirteen attack is a cryptographic timing attack against implementatio
 
 This vulnerability can be check using OpenSSL:
 ```
-openssl s_client -cipher DES-CBC3-SHA -connect example.com:443
+openssl s_client -cipher CBC_CIPHER -connect example.com:443
 ```
 If the server supports CBC3 ciphers, it is vulnerable.
 
